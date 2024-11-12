@@ -10,7 +10,11 @@ ASK_NAME, ASK_PHONE = range(2)
 
 # Начальная команда /start
 def start(update: Update, context: CallbackContext) -> int:
-    update.message.reply_text("Добро пожаловать на аукцион! Пожалуйста, введите ваше ФИО.")
+    update.message.reply_text("""Добро пожаловать в аукционный дом «ART VERNISSAGE». Введите Ваши данные, пожалуйста (Ф.И.О.)
+    
+----------------
+    
+Assalomu alaykum! “ART VERNISSAGE” auksion uyiga xush kelibsiz! Itimos, o’zingizni F.I.O. kiriting""")
     return ASK_NAME
 
 # Обработчик для получения ФИО
@@ -19,7 +23,12 @@ def ask_name(update: Update, context: CallbackContext) -> int:
     # Создаём кнопку для отправки номера телефона
     contact_button = KeyboardButton("Поделиться номером телефона", request_contact=True)
     reply_markup = ReplyKeyboardMarkup([[contact_button]], one_time_keyboard=True)
-    update.message.reply_text("Теперь поделитесь своим номером телефона:", reply_markup=reply_markup)
+    update.message.reply_text("""Поделитесь своим номером телефона:
+    
+----------------
+
+Telefon raqamingizni ulashing:
+""", reply_markup=reply_markup)
     return ASK_PHONE
 
 # Обработчик для получения номера телефона
@@ -31,7 +40,13 @@ def ask_phone(update: Update, context: CallbackContext) -> int:
 
     # Сохранение в базе данных
     Participant.objects.create(name=name, phone_number=phone_number, chat_id=chat_id)
-    update.message.reply_text(f"Вы зарегистрированы в качестве потенциального участника закрытого аукциона ART VERNISSAGE, под именем {name}!\nВаш телефон номер: {phone_number}")
+    update.message.reply_text(f"""Вы зарегистрированы в качестве потенциального участника закрытого аукциона ART VERNISSAGE, под именем {name}!\nВаш телефон номер: {phone_number}
+
+----------------
+
+Siz {name} nomi bilan ART VERNISSAGE yopiq auksionida potentsial ishtirokchi sifatida ro'yxatdan o'tgansiz!
+Telefon raqamingiz: {phone_number}
+""")
 
     return ConversationHandler.END
 
