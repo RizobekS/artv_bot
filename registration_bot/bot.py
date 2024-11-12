@@ -10,11 +10,11 @@ ASK_NAME, ASK_PHONE = range(2)
 
 # Начальная команда /start
 def start(update: Update, context: CallbackContext) -> int:
-    update.message.reply_text("""Добро пожаловать в аукционный дом «ART VERNISSAGE». Введите Ваши данные, пожалуйста (Ф.И.О.)
-    
+    update.message.reply_text("""Assalomu alaykum! “ART VERNISSAGE” auksion uyiga xush kelibsiz! Itimos, o’zingizni F.I.O. kiriting
+
 ----------------
     
-Assalomu alaykum! “ART VERNISSAGE” auksion uyiga xush kelibsiz! Itimos, o’zingizni F.I.O. kiriting""")
+Добро пожаловать в аукционный дом «ART VERNISSAGE». Введите Ваши данные, пожалуйста (Ф.И.О.)""")
     return ASK_NAME
 
 # Обработчик для получения ФИО
@@ -23,11 +23,11 @@ def ask_name(update: Update, context: CallbackContext) -> int:
     # Создаём кнопку для отправки номера телефона
     contact_button = KeyboardButton("Поделиться номером телефона", request_contact=True)
     reply_markup = ReplyKeyboardMarkup([[contact_button]], one_time_keyboard=True)
-    update.message.reply_text("""Поделитесь своим номером телефона:
+    update.message.reply_text("""Aloqa uchun telefon raqamingizni kiriting
     
 ----------------
 
-Telefon raqamingizni ulashing:
+Введите номер телефона для обратной связи
 """, reply_markup=reply_markup)
     return ASK_PHONE
 
@@ -40,12 +40,11 @@ def ask_phone(update: Update, context: CallbackContext) -> int:
 
     # Сохранение в базе данных
     Participant.objects.create(name=name, phone_number=phone_number, chat_id=chat_id)
-    update.message.reply_text(f"""Вы зарегистрированы в качестве потенциального участника закрытого аукциона ART VERNISSAGE, под именем {name}!\nВаш телефон номер: {phone_number}
+    update.message.reply_text(f"""Siz {name} nomi bilan ART VERNISSAGE yopiq auksionida potentsial ishtirokchi sifatida ro'yxatdan o'tgansiz!\nTelefon raqamingiz: {phone_number}
 
 ----------------
 
-Siz {name} nomi bilan ART VERNISSAGE yopiq auksionida potentsial ishtirokchi sifatida ro'yxatdan o'tgansiz!
-Telefon raqamingiz: {phone_number}
+Вы зарегистрированы в качестве потенциального участника закрытого аукциона ART VERNISSAGE, под именем {name}!\nВаш телефон номер: {phone_number}
 """)
 
     return ConversationHandler.END
