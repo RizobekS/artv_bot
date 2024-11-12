@@ -1,0 +1,10 @@
+{# templates/admin/send_message.html #}
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Отправить сообщение</button>
+  </form>
+{% endblock %}
