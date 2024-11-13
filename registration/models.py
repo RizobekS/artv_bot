@@ -1,4 +1,5 @@
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from telegram import Bot
 
@@ -49,7 +50,7 @@ class Participant(models.Model):
 
 class AuctionMessage(models.Model):
     title = models.CharField(max_length=355)
-    content = RichTextField()  # Поле с поддержкой форматирования
+    content = RichTextUploadingField()  # Поле с поддержкой форматирования
     send_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
