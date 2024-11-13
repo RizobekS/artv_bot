@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.urls import path
 from django.template.response import TemplateResponse
 from django.utils.html import strip_tags
-from telegram import Bot
+from telegram import Bot, ParseMode
 
 from .management.commands.send_message import send_message_to_paid_participants
 from .models import Participant, AuctionMessage
@@ -58,7 +58,7 @@ def send_latest_auction_message():
             print("Нет доступных сообщений для отправки.")
             return
 
-        message_text = strip_tags(message.content)  # Убираем HTML, если ваш бот не поддерживает HTML-разметку
+        message_text = message.content  # Оставляем HTML или Markdown теги
 
         # Отправка сообщения только оплатившим участникам
         bot = Bot(token=TELEGRAM_TOKEN)
@@ -69,7 +69,8 @@ def send_latest_auction_message():
 
         for participant in paid_participants:
             try:
-                bot.send_message(chat_id=participant.chat_id, text=message_text)
+                # Указываем режим разметки HTML или MarkdownV2
+                bot.send_message(chat_id=participant.chat_id, text=message_text, parse_mode=ParseMode.HTML)
                 print(f"Сообщение отправлено участнику: {participant.name}")
             except Exception as e:
                 print(f"Ошибка при отправке для {participant.name}: {e}")
