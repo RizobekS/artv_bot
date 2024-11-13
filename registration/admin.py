@@ -55,8 +55,33 @@ class AuctionMessageAdmin(admin.ModelAdmin):
 
 
 def send_latest_auction_message():
-    message = AuctionMessage.objects.latest('send_date')
-    send_message_to_paid_participants(strip_tags(message.content))
+    try:
+        # Получаем последнее сообщение для отправки
+        message = AuctionMessage.objects.latest('send_date')
+        if not message:
+            print("Нет доступных сообщений для отправки.")
+            return
+
+        message_text = strip_tags(message.content)  # Убираем HTML, если ваш бот не поддерживает HTML-разметку
+
+        # Отправка сообщения только оплатившим участникам
+        bot = Bot(token=TELEGRAM_TOKEN)
+        paid_participants = Participant.objects.filter(is_paid=True, chat_id__isnull=False)
+        if not paid_participants:
+            print("Нет участников с оплатой для отправки сообщений.")
+            return
+
+        for participant in paid_participants:
+            try:
+                bot.send_message(chat_id=participant.chat_id, text=message_text)
+                print(f"Сообщение отправлено участнику: {participant.name}")
+            except Exception as e:
+                print(f"Ошибка при отправке для {participant.name}: {e}")
+
+    except AuctionMessage.DoesNotExist:
+        print("Нет сообщений для отправки.")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
 
 
 admin.site.register(Participant, ParticipantAdmin)
