@@ -33,7 +33,7 @@ class Participant(models.Model):
         if self.chat_id:  # Отправка только если chat_id указан
             bot = Bot(token=TELEGRAM_TOKEN)
             try:
-                message_text = """Tabriklaymiz, siz Art Vernissage yopiq auksioni ishtirokchisiga aylandingiz!\n\n===================\n\nПоздравляю, вы стали участником закрытого аукциона Art Vernissage!"""
+                message_text = f"""Tabriklaymiz, siz Art Vernissage yopiq auksioni ishtirokchisiga aylandingiz!\n Sizning tartib raqamingiz - {self.registration_order}\n\n===================\n\nПоздравляю, вы стали участником закрытого аукциона Art Vernissage!\nВаш порядковый номер - {self.registration_order}"""
                 bot.send_message(chat_id=self.chat_id, text=message_text)
                 print(f"Сообщение отправлено участнику: {self.name}")
             except Exception as e:
