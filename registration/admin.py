@@ -50,10 +50,6 @@ class ParticipantAdmin(admin.ModelAdmin):
         return TemplateResponse(request, "admin/send_message.html", context)
 
 
-class AuctionMessageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'send_date')
-
-
 def send_latest_auction_message():
     try:
         # Получаем последнее сообщение для отправки
@@ -62,7 +58,7 @@ def send_latest_auction_message():
             print("Нет доступных сообщений для отправки.")
             return
 
-        message_text = strip_tags(message.content)  # Убираем HTML, если ваш бот не поддерживает HTML-разметку
+        message_text = message.content  # Убираем HTML, если ваш бот не поддерживает HTML-разметку
 
         # Отправка сообщения только оплатившим участникам
         bot = Bot(token=TELEGRAM_TOKEN)
@@ -82,6 +78,10 @@ def send_latest_auction_message():
         print("Нет сообщений для отправки.")
     except Exception as e:
         print(f"Произошла ошибка: {e}")
+
+
+class AuctionMessageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'send_date')
 
 
 admin.site.register(Participant, ParticipantAdmin)
