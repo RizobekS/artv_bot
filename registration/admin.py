@@ -2,14 +2,17 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path
 from django.template.response import TemplateResponse
+from django.utils.html import strip_tags
 from telegram import Bot
-from .models import Participant
+
+from .management.commands.send_message import send_message_to_paid_participants
+from .models import Participant, AuctionMessage
 from .forms import MessageForm
 from registration_bot.settings import TELEGRAM_TOKEN
 
 
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone_number', 'chat_id')
+    list_display = ('name', 'phone_number', 'registration_order', 'is_paid')
 
     # Добавляем кастомный URL для отправки сообщений
     def get_urls(self):
@@ -47,4 +50,14 @@ class ParticipantAdmin(admin.ModelAdmin):
         return TemplateResponse(request, "admin/send_message.html", context)
 
 
+class AuctionMessageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'send_date')
+
+
+def send_latest_auction_message():
+    message = AuctionMessage.objects.latest('send_date')
+    send_message_to_paid_participants(strip_tags(message.content))
+
+
 admin.site.register(Participant, ParticipantAdmin)
+admin.site.register(AuctionMessage, AuctionMessageAdmin)

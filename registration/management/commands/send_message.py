@@ -23,3 +23,11 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"Сообщение отправлено {participant.name}"))
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Ошибка при отправке для {participant.name}: {e}"))
+
+
+def send_message_to_paid_participants(message_text):
+    bot = Bot(token=TELEGRAM_TOKEN)
+    paid_participants = Participant.objects.filter(is_paid=True)
+    for participant in paid_participants:
+        if participant.chat_id:
+            bot.send_message(chat_id=participant.chat_id, text=message_text)
