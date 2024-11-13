@@ -16,6 +16,10 @@ class Participant(models.Model):
         return f"{self.registration_order}. {self.name}"
 
     def save(self, *args, **kwargs):
+        if self.pk:  # Только для уже существующих записей
+            previous = Participant.objects.get(pk=self.pk)
+            if not previous.is_paid and self.is_paid:  # Если is_paid изменился с False на True
+                self.send_congratulatory_message()
         # Проверка для новой регистрации (нового участника)
         is_new = not self.pk  # True, если это новая запись
 
@@ -29,6 +33,16 @@ class Participant(models.Model):
         # Если это новый участник, отправляем уведомление в группу
         if is_new:
             self.notify_group_of_registration()
+
+    def send_congratulatory_message(self):
+        if self.chat_id:  # Отправка только если chat_id указан
+            bot = Bot(token=TELEGRAM_TOKEN)
+            try:
+                message_text = f"""Tabriklaymiz, siz Art Vernissage yopiq auksioni ishtirokchisiga aylandingiz!\nSizning tartib raqamingiz - {self.registration_order}\n\n------------------\n\nПоздравляю, вы стали участником закрытого аукциона Art Vernissage!\nВаш порядковый номер - {self.registration_order}"""
+                bot.send_message(chat_id=self.chat_id, text=message_text)
+                print(f"Сообщение отправлено участнику: {self.name}")
+            except Exception as e:
+                print(f"Ошибка при отправке для {self.name}: {e}")
 
     def notify_group_of_registration(self):
         # Формируем текст сообщения
