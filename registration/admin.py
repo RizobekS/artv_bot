@@ -58,7 +58,7 @@ def send_latest_auction_message():
             print("Нет доступных сообщений для отправки.")
             return
 
-        message_text = message.content  # Убираем HTML, если ваш бот не поддерживает HTML-разметку
+        message_text = strip_tags(message.content)  # Убираем HTML, если ваш бот не поддерживает HTML-разметку
 
         # Отправка сообщения только оплатившим участникам
         bot = Bot(token=TELEGRAM_TOKEN)
