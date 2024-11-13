@@ -83,6 +83,12 @@ def send_latest_auction_message():
 class AuctionMessageAdmin(admin.ModelAdmin):
     list_display = ('title', 'send_date')
 
+    # Добавляем обработчик для сохранения и отправки сообщений
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        send_latest_auction_message()  # Вызываем функцию отправки сообщения при сохранении сообщения
+
+
 
 admin.site.register(Participant, ParticipantAdmin)
 admin.site.register(AuctionMessage, AuctionMessageAdmin)
