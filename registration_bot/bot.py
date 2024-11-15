@@ -45,13 +45,13 @@ def ask_phone(update: Update, context: CallbackContext) -> int:
 
     # Текст сообщения
     message_text = f"""
-    Siz {name} nomi bilan ART VERNISSAGE yopiq auksionida potentsial ishtirokchi sifatida ro'yxatdan o'tgansiz!\n
+    Siz {name} ismi bilan "O'zbekiston tasviriy san'atining arboblari" yopiq auksionida potentsial ishtirokchi sifatida ro'yxatdan o'tgansiz!\n
     Telefon raqamingiz: {phone_number}\n
     Auksionga qo'yilgan lotlar bilan ART GALLERY galereyamizda quyidagi manzil bo'yicha tanishish mumkin: Toshkent sh, Muqimiy ko'chasi, 1 prospekt, 8-a y.\n
-    Murojaat uchun telefon\n+998 55 514-12-12 \n+998 55 515-17-07\n
+    Murojaat uchun telefon\n+998555141212\n+998555151707\n
     [Xarita uchun havola]({MAP_LINK})\n\n
     -----------------\n\n
-    Вы зарегистрированы в качестве потенциального участника закрытого аукциона ART VERNISSAGE, под именем {name}!\n
+    Вы зарегистрированы в качестве потенциального участника закрытого аукциона "Корифеи живописи Узбекистана", под именем {name}!\n
     Ваш телефон номер: {phone_number}\n
     Ознакомиться с выставленными на аукцион лотами можно в нашей галерее Art gallery по адресу: г. Ташкент, ул. Мукимий, проспект 1, дом 8-а\n
     Телефон для связи +998 55 514-12-12 \n+998 55 515-17-07\n
