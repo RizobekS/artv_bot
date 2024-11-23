@@ -1,6 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.db import models
-from telegram import Bot
+from telegram import Bot, InputMediaPhoto
 
 from registration_bot.settings import TELEGRAM_TOKEN, GROUP_CHAT_ID
 
@@ -38,11 +38,40 @@ class Participant(models.Model):
         if self.chat_id:  # Отправка только если chat_id указан
             bot = Bot(token=TELEGRAM_TOKEN)
             try:
-                message_text = f"""Tabriklaymiz, siz Art Vernissage yopiq auksioni ishtirokchisiga aylandingiz!\nSizning tartib raqamingiz - {self.registration_order}\n\n------------------\n\nПоздравляю, вы стали участником закрытого аукциона Art Vernissage!\nВаш порядковый номер - {self.registration_order}"""
-                bot.send_message(chat_id=self.chat_id, text=message_text)
-                print(f"Сообщение отправлено участнику: {self.name}")
+                # Текст сообщения
+                message_text = (
+                    f"Tabriklaymiz, siz Art Vernissage yopiq auksioni ishtirokchisiga aylandingiz!\n"
+                    f"Sizning tartib raqamingiz - {self.registration_order}\n\n"
+                    f"Auktsion bo'lib o'tadigan joy xaritasi: [Restoran Miras](https://yandex.com/maps/org/miras/156735956162?si=b4wud2ud6tgn511fur4k6qb8hr)\n"
+                    f"Manzil: Toshkent sh. Amir Temur ko'chasi, 60\n"
+                    f"Sana va vaqt: 2024-yil 27-noyabr, soat 18:00\n\n"
+                    f"Biz sizni tadbirda kutamiz!"
+                    f"------------------\n\n"
+                    f"Поздравляю, вы стали участником закрытого аукциона Art Vernissage!\n"
+                    f"Ваш порядковый номер - {self.registration_order}\n\n"
+                    f"Карта проведения аукциона: [Ресторан Miras](https://yandex.com/maps/org/miras/156735956162?si=b4wud2ud6tgn511fur4k6qb8hr)\n"
+                    f"Адрес: г. Ташкент, ул. Амира Темура, д. 60\n"
+                    f"Дата и время: 27 ноября 2024 года, 18:00\n\n"
+                    f"Ждём вас на мероприятии!"
+                )
+
+                # Пути к фотографиям
+                photo_paths = [
+                    "./1.jpg",  # Первая фотография
+                    "./2.jpg"  # вторая фотография
+                ]
+
+                # Отправка фотографий с подписью
+                media_group = [
+                    InputMediaPhoto(media=open(photo_path, 'rb')) for photo_path in photo_paths
+                ]
+                bot.send_media_group(chat_id=self.chat_id, media=media_group)
+
+                # Отправка текста с ссылкой
+                bot.send_message(chat_id=self.chat_id, text=message_text, parse_mode="Markdown")
+                print(f"Сообщение с фото отправлено участнику: {self.name}")
             except Exception as e:
-                print(f"Ошибка при отправке для {self.name}: {e}")
+                print(f"Ошибка при отправке сообщения для {self.name}: {e}")
 
     def notify_group_of_registration(self):
         # Формируем текст сообщения
