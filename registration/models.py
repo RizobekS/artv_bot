@@ -1,4 +1,7 @@
+import os
+
 from ckeditor.fields import RichTextField
+from django.conf import settings
 from django.db import models
 from telegram import Bot, InputMediaPhoto
 
@@ -57,8 +60,8 @@ class Participant(models.Model):
 
                 # Пути к фотографиям
                 photo_paths = [
-                    "../1.jpg",  # Первая фотография
-                    "../2.jpg"  # вторая фотография
+                    os.path.join(settings.BASE_DIR, "1.jpg"),  # Первая фотография
+                    os.path.join(settings.BASE_DIR, "2.jpg"),  # Вторая фотография
                 ]
 
                 # Отправка фотографий с подписью
