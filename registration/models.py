@@ -44,8 +44,8 @@ class Participant(models.Model):
                     f"Sizning tartib raqamingiz - {self.registration_order}\n\n"
                     f"Auktsion bo'lib o'tadigan joy xaritasi: [Restoran Miras](https://yandex.com/maps/org/miras/156735956162?si=b4wud2ud6tgn511fur4k6qb8hr)\n"
                     f"Manzil: Toshkent sh. Amir Temur ko'chasi, 60\n"
-                    f"Sana va vaqt: 2024-yil 27-noyabr, soat 18:00\n\n"
-                    f"Biz sizni tadbirda kutamiz!"
+                    f"Sana va vaqt: 2024-yil 27-noyabr, soat 18:00\n"
+                    f"Biz sizni tadbirda kutamiz!\n\n"
                     f"------------------\n\n"
                     f"Поздравляю, вы стали участником закрытого аукциона Art Vernissage!\n"
                     f"Ваш порядковый номер - {self.registration_order}\n\n"
@@ -57,8 +57,8 @@ class Participant(models.Model):
 
                 # Пути к фотографиям
                 photo_paths = [
-                    "./1.jpg",  # Первая фотография
-                    "./2.jpg"  # вторая фотография
+                    "../1.jpg",  # Первая фотография
+                    "../2.jpg"  # вторая фотография
                 ]
 
                 # Отправка фотографий с подписью
